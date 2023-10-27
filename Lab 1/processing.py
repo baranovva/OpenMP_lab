@@ -24,11 +24,12 @@ if part == 1:
     plt.show()
 
 elif part == 2:
-    indexes = ['static,1', 'static,2', 'static,5', 'static,10', 'static,25', 'static,50', 'static,100', 'dynamic',
-               'guided']
+    indexes = ['static,1', 'static,2', 'static,5', 'static,10', 'static,25',
+               'static,50', 'static,100', 'dynamic', 'guided']
 
     times = np.array([0.642, 0.715, 0.651, 0.885, 0.664, 1.112, 1.918, 0.608, 0.753])
     index = np.arange(len(indexes))
+
     bw = 0.6
     plt.axis([-0.5, len(indexes) - 0.5, 0, 2])
     plt.bar(index, times, bw, color='b')
@@ -54,15 +55,37 @@ elif part == 3:
     plt.grid(axis="y")
     plt.show()
 
+    statics_val = ['static,1', 'static,2', 'static,5', 'static,10', 'static,25', 'static,50', 'static,100']
+
+    times_wo_optim_static_N1 = np.array([0.642, 0.715, 0.651, 0.885, 0.664, 1.112, 1.918])
+    times_optim_o2_static_N1 = np.array([0.486, 0.439, 0.452, 0.482, 0.45, 0.554, 0.894])
+    times_wo_optim_static_N2 = np.array([0.016, 0.016, 0, 0.016, 0.015, 0.015, 0.006])
+    times_optim_o2_static_N2 = np.array([0, 0.007, 0.016, 0, 0.015, 0, 0.016])
+    times_wo_optim_static_N3 = np.array([0, 0.008, 0.007, 0, 0, 0.007, 0.015])
+    times_optim_o2_static_N3 = np.array([0, 0, 0, 0, 0, 0, 0])
+
+    plt.scatter(statics_val, times_wo_optim_static_N1, label='N = 1, without optimization', s=60, c='b')
+    plt.scatter(statics_val, times_optim_o2_static_N1, label='N = 1, -O2', s=60, c='r')
+    plt.scatter(statics_val, times_wo_optim_static_N2, label='N = 2, without optimization', s=60, c='g')
+    plt.scatter(statics_val, times_optim_o2_static_N2, label='N = 2, -O2', s=60, c='#9467bd')
+    plt.scatter(statics_val, times_wo_optim_static_N3, label='N = 3, without optimization', s=60, c='#8c564b')
+    plt.scatter(statics_val, times_optim_o2_static_N3, label='N = 3, -O2', s=60, c='#17becf')
+    plt.yscale('log')
+    plt.ylabel("t, sec")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+
 elif part == 4:
 
     def plot(y_data_for: object, y_data_section: object, y_label: str) -> None:
-        plt.plot(threads, y_data_for, label="for program")
-        plt.plot(threads, y_data_section, label="section program")
+        plt.scatter(threads, y_data_for, label="for program", s=60, c='b')
+        plt.scatter(threads, y_data_section, label="section program", s=60, c='r')
         plt.ylabel(y_label)
         plt.xlabel("Number of threads")
-        plt.grid(True)
         plt.legend()
+        plt.grid(True)
         plt.show()
 
 
@@ -74,15 +97,11 @@ elif part == 4:
     plot(times_for, times_sections, "t, sec")
 
     s_for = [times_for[0] / time for time in times_for]
-    print(s_for)
     s_sections = [times_sections[0] / time for time in times_sections]
-    print(s_sections)
 
     plot(s_for, s_sections, "Sp")
 
     e_for = [s_for[i] / threads[i] for i in range(len(s_for))]
-    print(e_for)
     e_sections = [s_sections[i] / threads[i] for i in range(len(s_sections))]
-    print(e_sections)
 
     plot(e_for, e_sections, "Ep")
