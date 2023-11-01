@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-part = 3
+part = 2
 if part == 1:
     indexes = ['N=1', 'N=2', 'N=3', 'N=4']
 
@@ -20,7 +20,7 @@ if part == 1:
     plt.show()
 
 elif part == 2:
-    indexes = ('N = 1', 'N = 2', 'N = 3', 'N = 4')
+    threads = np.arange(1, 5)
 
     times_spmd = np.array([2.199, 1.467, 0.902, 0.747])
     times_array = np.array([2.064, 1.824, 1.659, 1.664])
@@ -29,16 +29,53 @@ elif part == 2:
     times_lock = np.array([2.08, 1.186, 0.864, 0.725])
     times_do = np.array([2.074, 1.113, 0.935, 0.726])
 
-    plt.scatter(indexes, times_spmd, label='spmd', s=60, c='b')
-    plt.scatter(indexes, times_array, label='array', s=60, c='r')
-    plt.scatter(indexes, times_critical, label='critical', s=60, c='g')
-    plt.scatter(indexes, times_atomic, label='atomic', s=60, c='#9467bd')
-    plt.scatter(indexes, times_lock, label='lock', s=60, c='#8c564b')
-    plt.scatter(indexes, times_do, label='do', s=60, c='#17becf')
+    plt.scatter(threads, times_spmd, label='spmd', s=60, c='b')
+    plt.scatter(threads, times_array, label='array', s=60, c='r')
+    plt.scatter(threads, times_critical, label='critical', s=60, c='g')
+    plt.scatter(threads, times_atomic, label='atomic', s=60, c='#9467bd')
+    plt.scatter(threads, times_lock, label='lock', s=60, c='#8c564b')
+    plt.scatter(threads, times_do, label='do', s=60, c='#17becf')
     plt.ylabel("t, sec", fontsize=12)
     plt.legend()
     plt.grid(True)
     plt.show()
+
+    s_spmd = [times_spmd[0] / time for time in times_spmd]
+    s_array = [times_array[0] / time for time in times_array]
+    s_critical = [times_critical[0] / time for time in times_critical]
+    s_atomic = [times_atomic[0] / time for time in times_atomic]
+    s_lock = [times_lock[0] / time for time in times_lock]
+    s_do = [times_do[0] / time for time in times_do]
+
+    plt.scatter(threads, s_spmd, label='spmd', s=60, c='b')
+    plt.scatter(threads, s_array, label='array', s=60, c='r')
+    plt.scatter(threads, s_critical, label='critical', s=60, c='g')
+    plt.scatter(threads, s_atomic, label='atomic', s=60, c='#9467bd')
+    plt.scatter(threads, s_lock, label='lock', s=60, c='#8c564b')
+    plt.scatter(threads, s_do, label='do', s=60, c='#17becf')
+    plt.ylabel("Sp", fontsize=12)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+    e_spmd = [s_spmd[i] / threads[i] for i in range(len(s_spmd))]
+    e_array = [s_array[i] / threads[i] for i in range(len(s_array))]
+    e_critical = [s_critical[i] / threads[i] for i in range(len(s_critical))]
+    e_atomic = [s_atomic[i] / threads[i] for i in range(len(s_atomic))]
+    e_lock = [s_lock[i] / threads[i] for i in range(len(s_lock))]
+    e_do = [s_do[i] / threads[i] for i in range(len(s_do))]
+
+    plt.scatter(threads, e_spmd, label='spmd', s=60, c='b')
+    plt.scatter(threads, e_array, label='array', s=60, c='r')
+    plt.scatter(threads, e_critical, label='critical', s=60, c='g')
+    plt.scatter(threads, e_atomic, label='atomic', s=60, c='#9467bd')
+    plt.scatter(threads, e_lock, label='lock', s=60, c='#8c564b')
+    plt.scatter(threads, e_do, label='do', s=60, c='#17becf')
+    plt.ylabel("Ep", fontsize=12)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
 
 elif part == 3:
     indexes = ['static,1', 'static,10', 'static,100', 'static,1000',
@@ -50,7 +87,7 @@ elif part == 3:
     index = np.arange(len(indexes))
     bw = 0.9
     plt.bar(index, times, bw, color='b')
-    plt.xticks(index, indexes,  rotation=30, fontsize=10)
+    plt.xticks(index, indexes, rotation=30, fontsize=10)
     plt.ylabel("t, sec", fontsize=12)
     plt.xlabel("schedule", fontsize=12)
     plt.yscale('log')
