@@ -2,7 +2,7 @@
 #include <omp.h>
 #include <cmath>
 
-#define SIZE 48
+#define SIZE 4
 #define n 100000000
 
 int main() {
